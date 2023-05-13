@@ -996,7 +996,6 @@ public class Passman {
             {
                 if (true) 
                 {
-                    System.out.println(passman.accounts.get(passman.Encrypteduname)); 
                     System.out.println();
                     System.out.println("  Welcome to");
                     logo();
