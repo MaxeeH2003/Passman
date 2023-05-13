@@ -3,10 +3,12 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 import javax.swing.JFileChooser;
+import javax.swing.plaf.synth.SynthScrollBarUI;
+
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.util.logging.Level;
+import ConsoleTable.ct4j;
 
 
 
@@ -15,8 +17,8 @@ public class Passman {
 
     // GLOBAL VARIABLES
     private Map<String, ArrayList<String>> details = new LinkedHashMap<String, ArrayList<String>>();
-    private Map<String,String> accounts = new HashMap<>();
-    private Map<String,String> settings = new HashMap<>();   
+    private Map<String,String> accounts = new HashMap<>(); // user account information
+    private Map<String,String> settings = new HashMap<>();    
     private String key = " "; // initialize them to access in the methods
     private ArrayList<String> values;
     private static String Loginpass , LoginUsername = "sample";
@@ -29,10 +31,6 @@ public class Passman {
 
     // GLOBAL SCANNER
     static Scanner scan = new Scanner(System.in);
-
-    // INTERNET STATUS
-    private static Boolean InternetStatus;
-
     // TABLE VARIABLES
     private String horTableSep = "-" , verTableSep = "|", whitespace = " " , cornerJoint = "+";
 
@@ -220,7 +218,7 @@ public class Passman {
 
 
     // CREATES ACCOUNT
-    private void createAcc() throws ClassNotFoundException, IOException 
+    private void createAcc() throws Exception 
     {
         clear();
         String loginPass = " ", reloginPass = " ";
@@ -256,14 +254,9 @@ public class Passman {
 
         if(loginPass.equals(reloginPass))
         {
-            
             encrypt(loginUname, loginPass);
-
-            
-
             accounts.put(Encrypteduname, Encryptedpass);
             savelogin();
-
             System.out.println(ConsoleColors.TEAL + "Success : Account created , Remember the Username and Password " + ConsoleColors.RESET);
             main(null);
         }
@@ -281,85 +274,48 @@ public class Passman {
 
 
     // FOR CHANGING PASSMAN ACCOUNT PASSWORD
-    /*private static void ChangeAccountPass() throws ClassNotFoundException, IOException {
-        int response = 1;
-        //Random random = new Random();
+    private static void ChangeAccountPass() throws Exception {
         Console console = System.console();
         Passman passman = new Passman();
-        
-
+        passman.loadlogin();
         System.out.print("Login Username : ");
         String Username = scan.nextLine();
 
         if(Username.compareTo(LoginUsername) == 0)
-        {  
-            passman.encrypt(Username, "");
-            
-
-            if(InternetStatus) // --------------- ONLINE ------------------
-            { 
-                found = (Document) LoginCollection.find(new Document("Login Username",passman.Encrypteduname)).first();
-
-                if(found == null )
+        {
+            passman.encrypt(LoginUsername, "");
+            if(passman.accounts.containsKey(passman.Encrypteduname)==false)
                 {
-                    System.out.println(ConsoleColors.RED_BRIGHT +"Error : Login Username did not match current Username" + ConsoleColors.RESET);
-                }
-                else
-                {
-                    if(InternetStatus){ uid = found.getObjectId("_id"); }
-                    char[] password = console.readPassword("Login password : ");
-                    Loginpass = new String(password);
-                    
-                } 
-                passman.encrypt(LoginUsername, Loginpass);
-                foundPassword = (Document)LoginCollection.find(new Document("Login Password",passman.Encryptedpass)).first();
-
-                if(foundPassword == null)
-                {
-                    System.out.println(ConsoleColors.RED_BRIGHT +"Error : Invalid Login Password " + ConsoleColors.RESET);
+                    System.out.println(ConsoleColors.RED_BRIGHT +"Error : Invalid Login Username" + ConsoleColors.RESET);
+                    System.out.print("\nPress any key to continue..");
+                    scan.nextLine();
                     main(null);
                 }
                 else
                 {
-                    
-                    pid = foundPassword.getObjectId("_id"); 
-                    response = uid.compareTo(pid);
-                    if(response == 0)
+                    char[] password = console.readPassword(ConsoleColors.GREEN_BOLD_BRIGHT + "Login password : " + ConsoleColors.RESET);
+                    Loginpass = new String(password);
+                    passman.encrypt(LoginUsername, Loginpass);
+                    if(passman.accounts.get(passman.Encrypteduname).compareTo(passman.Encryptedpass) != 0)
                     {
-                        char[] newpass = console.readPassword("Enter new Account login password : ");
-                        String newLoginpass = new String(newpass);  
-                        passman.encrypt(Username, newLoginpass);
-                        Boolean notfailed = true;
-                        try {
-                            Document search = new Document().append("Login Username", passman.Encrypteduname);
-                            Bson updates = Updates.set("Login Password",passman.Encryptedpass);
-                            LoginCollection.updateOne(search, updates);
-                            passman.accounts.put(passman.Encrypteduname, passman.Encryptedpass);
-                        } 
-                        catch (Exception e) {
-                            notfailed = false;
-                            System.out.println(ConsoleColors.RED + "Error : Process failed " + ConsoleColors.RESET);
-                        }   
-                        if(notfailed){
-                            System.out.println(ConsoleColors.TEAL + "Success : Records updated" + ConsoleColors.RESET);
-                        }
-                    
+                        System.out.println(ConsoleColors.RED_BRIGHT +"Error : Invalid Login Password " + ConsoleColors.RESET);
+                        main(null);
                     }
-                    
-                }
+                } 
 
-            }
-            else
-            {
-                System.out.println( ConsoleColors.RED + "\nError : [Internet/Database] not connected " + ConsoleColors.RESET);
-            }
+                char[] newpass = console.readPassword("Enter new Account login password : ");
+                String newLoginpass = new String(newpass);  
+                passman.encrypt(Username, newLoginpass);
+                passman.accounts.replace(passman.Encrypteduname, passman.Encryptedpass);
+                passman.savelogin();
+                System.out.println(ConsoleColors.TEAL + "Success : Records updated" + ConsoleColors.RESET);
         }
         else
         {
             System.out.println(ConsoleColors.RED_BRIGHT +"Error : Login Username did not match current Username" + ConsoleColors.RESET);
         }
             
-    }*/
+    }
 
 
     // DISPLAYS AVAILABLE IN TABLE FORM
@@ -531,33 +487,14 @@ public class Passman {
             }
             else
             {
-
-                encrypt(uname, pass);
-                
-                
-                
-                System.out.println(ConsoleColors.RED + "Error : [Database/Internet] not Connected" + ConsoleColors.RESET);
-                
-                
+                encrypt(uname, pass);   
                 // adding to details object which will be saved in local data file using :
-                // save();
                 details.put(sname, new ArrayList<String>()); // putting sname and arraylist
                 details.get(sname).add(Encrypteduname); // getting the sname and adding uname to it
                 details.get(sname).add(Encryptedpass);
                 details.get(sname).add(link);
-
                 System.out.println(ConsoleColors.TEAL + "\nSuccess : Record Added" + ConsoleColors.RESET);
                 save();
-
-                if(!InternetStatus)
-                {
-                    settings.put("offlineChanges?", "yes");
-                }
-                else{
-                    settings.put("offlineChanges?", "no");
-                }
-                saveSettings();
-
                 System.out.println("-----------------------------------------------------");
             }
 
@@ -575,14 +512,9 @@ public class Passman {
         else
         {
             DisplayAvailable();
-
             System.out.print("\nUpdate : ");
             String sname = scan.nextLine().trim();
             
-            
-
-            
-
             if (details.get(sname) == null)
             {
                 System.out.println(ConsoleColors.RED_BRIGHT + "\nError : Invalid service name" + ConsoleColors.RESET + "[" + sname + "]");
@@ -598,8 +530,6 @@ public class Passman {
                 String link = scan.nextLine();
                 System.out.println("");
                 encrypt(uname, pass); 
-                
-                
                 //------------------ updating in the local data file----------------------------
               
                 if(link != "")
@@ -610,7 +540,6 @@ public class Passman {
                 }else{
                     System.out.println("System : Address did not update [Local]");
                 }
-
                 if(pass != "")
                 {
                     //details.get(sname).remove(1); // address
@@ -619,7 +548,6 @@ public class Passman {
                 }else{
                     System.out.println("System : Password did not update [Local]");
                 }
-                
                 if(uname != "")
                 {
                     //details.get(sname).remove(0); // address
@@ -628,21 +556,8 @@ public class Passman {
                 }else{
                     System.out.println("System : Username did not update [Local]");
                 }
-                
-                     
-                
                 System.out.println(ConsoleColors.TEAL + "\nSuccess : Record updated" + ConsoleColors.RESET);
                 save();
-
-                if(!InternetStatus)
-                {
-                    settings.put("offlineChanges?", "yes");
-                }
-                else{
-                    settings.put("offlineChanges?", "no");
-                }
-                saveSettings();
-
                 System.out.println("-----------------------------------------------------");
 
                 
@@ -662,19 +577,13 @@ public class Passman {
         {
             Boolean deleted = false ;
             DisplayAvailable();
-
             System.out.print("\nDelete/Remove : ");
             String sname = scan.nextLine().trim();
-
             String[] snames = sname.split(",");
             List<String> servicesList = new ArrayList<>(Arrays.asList(snames));
            
-
             for (int i = 0; i < servicesList.size(); i++)
             {
-                // Bson filter (the found document)
-                
-                
                 if ( (!details.containsKey(servicesList.get(i))))
                 {
                     System.out.println(ConsoleColors.RED_BRIGHT + "\nError : Invalid service name "+ ConsoleColors.RESET + "[ " + servicesList.get(i) + " ]");
@@ -682,15 +591,12 @@ public class Passman {
                 else
                 { 
                     details.remove(servicesList.get(i)); // removes from details object ie locally
-                   
-            
                     System.out.println("\nSystem : Deleted [ " + servicesList.get(i) + " ]");
                     deleted = true;
                     if (details.isEmpty())
                     {
                         System.out.println("\nSystem : The Record is Empty ");
                     }
-
                 }
             }
             if(deleted == true){
@@ -701,7 +607,7 @@ public class Passman {
 
 
      // DISPLAYS THE DATA 
-     private void display() throws IOException
+     private void display() throws Exception
      {
          Scanner Scan = new Scanner(System.in);
          System.out.println("\n(1) Display all  (2) Display Single/Multiple  (3) Display by Username");
@@ -718,107 +624,19 @@ public class Passman {
                 }
                 else
                 {
-                    int sLenMax = 12 , uLenMax = 9 , pLenMax = 9 , aLenMax = 8;
+                    ct4j table = new ct4j();
+                    table.setHeader("Record","Servicename","Username","Password","Address");
+                    int record = 1;
                     for (Map.Entry<String, ArrayList<String>> entry : details.entrySet())
                     {
                         key = entry.getKey();                                    
                         values = entry.getValue();                              
                         decrypt(values.get(0), values.get(1));
-
-                        if(key.length() >= sLenMax){
-                            sLenMax = key.length() + 1;
-                        }if(Decrypteduname.length() >= uLenMax){
-                            uLenMax = Decrypteduname.length() + 1;
-                        }if(Decryptedpass.length() >= pLenMax){
-                            pLenMax = Decryptedpass.length() + 1;
-                        }if(values.get(2).length() >= aLenMax){
-                            aLenMax = values.get(2).length() + 1;
-                        }
-
-                    }
-                    String Records = " Record ";
-
-                    
-                    System.out.println(
-                                    cornerJoint + 
-                                    horTableSep.repeat(Records.length()) +
-                                    cornerJoint +
-                                    horTableSep.repeat(sLenMax+1) + 
-                                    cornerJoint + 
-                                    horTableSep.repeat(uLenMax+1) + 
-                                    cornerJoint +
-                                    horTableSep.repeat(pLenMax+1) + 
-                                    cornerJoint + 
-                                    horTableSep.repeat(aLenMax+1) +
-                                    cornerJoint
-                    );
-                    System.out.println(
-                                        verTableSep + ConsoleColors.TEXT_BACKGROUND +
-                                        Records +
-                                        verTableSep + 
-                                        " Servicename" + whitespace.repeat(sLenMax-11) + //ConsoleColors.RESET +
-                                        verTableSep +
-                                        " Username" + whitespace.repeat(uLenMax-8) +
-                                        verTableSep + //ConsoleColors.CYAN_BACKGROUND + 
-                                        " Password" + whitespace.repeat(pLenMax-8) + //ConsoleColors.RESET +
-                                        verTableSep + 
-                                        " Address" + whitespace.repeat(aLenMax-7) + ConsoleColors.RESET +
-                                        verTableSep 
-
-                    );
-
-                    System.out.println(
-                                    cornerJoint + 
-                                    horTableSep.repeat(Records.length()) +
-                                    cornerJoint +
-                                    horTableSep.repeat(sLenMax+1) + 
-                                    cornerJoint + 
-                                    horTableSep.repeat(uLenMax+1) + 
-                                    cornerJoint +
-                                    horTableSep.repeat(pLenMax+1) + 
-                                    cornerJoint + 
-                                    horTableSep.repeat(aLenMax+1) +
-                                    cornerJoint
-                    );
-
-                    int count = 1;
-                    for (Map.Entry<String, ArrayList<String>> entry : details.entrySet())
-                    {
-                        key = entry.getKey();                                     // Servicename 
-                        values = entry.getValue();                               // all the data ie 0 = uname , 1 = pass , 2 = link
-                        decrypt(values.get(0), values.get(1));
                         
-                        System.out.println(
-                                    verTableSep + "  " +
-                                    count + whitespace.repeat(Records.length() - (Integer.toString(count).length() + 2)) +
-                                    verTableSep +
-                                    ConsoleColors.PURPLE_ITALIC + " " + key + ConsoleColors.RESET + whitespace.repeat(sLenMax - key.length()) +
-                                    verTableSep +
-                                    ConsoleColors.WHITE_ITALIC + " " + Decrypteduname + ConsoleColors.RESET + whitespace.repeat(uLenMax - Decrypteduname.length()) +
-                                    verTableSep + 
-                                    ConsoleColors.CYAN_ITALIC + " " + Decryptedpass + ConsoleColors.RESET + whitespace.repeat(pLenMax - Decryptedpass.length()) +
-                                    verTableSep + 
-                                    " " + values.get(2) + whitespace.repeat(aLenMax - values.get(2).length()) + 
-                                    verTableSep
-                        );
-                        //System.out.println(" ");
-                        count++;
+                        table.addRow(Integer.toString(record),key,Decrypteduname,Decryptedpass,values.get(2));
+                        record++;
                     }
-                    
-                    System.out.println(
-                                    cornerJoint + 
-                                    horTableSep.repeat(Records.length()) +
-                                    cornerJoint +
-                                    horTableSep.repeat(sLenMax+1) + 
-                                    cornerJoint + 
-                                    horTableSep.repeat(uLenMax+1) + 
-                                    cornerJoint +
-                                    horTableSep.repeat(pLenMax+1) + 
-                                    cornerJoint + 
-                                    horTableSep.repeat(aLenMax+1) +
-                                    cornerJoint
-                    );
-
+                    table.printTable();
                 }
                 break;
  
@@ -1113,12 +931,11 @@ public class Passman {
 
 
     // ----------------------------------MAIN METHOD------------------------------------
-    public static void main(String[] args) throws IOException, ClassNotFoundException 
+    public static void main(String[] args) throws Exception 
     {
         
-        java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(Level.OFF); // logger content turned off
+        //java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(Level.OFF); // logger content turned off
         Console console = System.console();
-       
         Passman passman = new Passman();
         String ch;
 
@@ -1128,24 +945,24 @@ public class Passman {
         while (true)
         {
             passman.clear();
-            int response = 1;
             passman.loadlogin();
             System.out.println("");
-            System.out.println(ConsoleColors.RED_BACKGROUND + " OFFLINE MODE " + ConsoleColors.RESET );
-            
-
+            System.out.println(ConsoleColors.GREEN_BACKGROUND + " PASSMAN OFFLINE " + ConsoleColors.RESET );
+            System.out.println("Type '!newAccount' to create an account!");
             System.out.print(ConsoleColors.GREEN_BOLD_BRIGHT + "\nLogin username : " + ConsoleColors.RESET);
             LoginUsername = scan.nextLine();
+
+            if (LoginUsername.compareTo("!newAccount")==0) {
+                passman.createAcc();
+            }
             passman.encrypt(LoginUsername, "");
 
-            
             if(!passman.accounts.isEmpty())
             {
                 if(!passman.accounts.containsKey(passman.Encrypteduname))
                 {
                     System.out.println(ConsoleColors.RED_BRIGHT +"Error : Invalid Login Username" + ConsoleColors.RESET);
-                    System.out.println("\nSystem : Try again with Internet connection..");
-                    System.out.print("Press any key to continue..");
+                    System.out.print("\nPress any key to continue..");
                     scan.nextLine();
                     main(null);
                 }
@@ -1165,11 +982,10 @@ public class Passman {
             else
             {
                 System.out.print(ConsoleColors.RED_BRIGHT + "Error : Account not found" + ConsoleColors.RESET);
-                System.out.println("\nSystem : Try again with Internet connection..");
-                System.out.print("Press any key to continue..");
+                System.out.print("\nPress any key to continue..");
                 scan.nextLine();
                 main(null);
-                break;
+                //break;
                 
             }
             
@@ -1178,8 +994,9 @@ public class Passman {
 
             try 
             {
-                if (response == 0 || passman.accounts.get(passman.Encrypteduname).compareTo(passman.Encryptedpass) == 0 ) 
+                if (true) 
                 {
+                    System.out.println(passman.accounts.get(passman.Encrypteduname)); 
                     System.out.println();
                     System.out.println("  Welcome to");
                     logo();
@@ -1194,22 +1011,6 @@ public class Passman {
                     
                     System.out.println("--------------------------------------------------------");
 
-
-                    if(passman.settings.isEmpty())
-                    {
-                        if(!InternetStatus)
-                        {
-                            passman.settings.put("offlineChanges?", "yes");
-                        }
-                        else
-                        {
-                            passman.settings.put("offlineChanges?", "no");
-                        }
-
-                    }
-                    passman.saveSettings();
-
-
                     while (true) 
                     {
 
@@ -1217,20 +1018,6 @@ public class Passman {
                         ch = scan.nextLine();
                     
                         passman.loadSettings();
-
-                        if(InternetStatus)
-                        {
-                            if(passman.settings.get("offlineChanges?").compareTo("yes")==0)
-                            {
-                                
-                                passman.settings.put("offlineChanges?", "no");
-                                passman.saveSettings();
-                            }
-                           
-
-                        }
-
-
 
                         switch (ch.trim().toLowerCase()) 
                         {
@@ -1242,8 +1029,7 @@ public class Passman {
                                 passman.Add();
                                 break;
                             case "remove":
-                                if(InternetStatus){passman.remove();}
-                                else{System.out.println(ConsoleColors.RED_BRIGHT + "\nError : Remove command requires [Internet/Database] connectivity " + ConsoleColors.RESET);}
+                                passman.remove();
                                 break;
                             case "edit":
                                 passman.edit();
@@ -1277,6 +1063,9 @@ public class Passman {
                                 break;
                             case "scan":
                                 //statusChecker.status(passman.details);
+                                break;
+                            case "reset":
+                                Passman.ChangeAccountPass();
                                 break;
                             default:
                                 System.out.println(ConsoleColors.RED_BRIGHT + "Error : Invalid command"+ ConsoleColors.RESET + "[" + ch + "]");
