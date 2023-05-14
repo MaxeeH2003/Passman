@@ -191,7 +191,7 @@ public class Passman {
         Console console = System.console();
         Passman passman = new Passman();
         passman.loadlogin();
-        System.out.print("Login Username : ");
+        System.out.print(ConsoleColors.YELLOW_BOLD_BRIGHT + "Login Username : "+ ConsoleColors.RESET);
         String Username = scan.nextLine();
         if(Username.compareTo(LoginUsername) == 0)
         {
@@ -205,7 +205,7 @@ public class Passman {
                 }
                 else
                 {
-                    char[] password = console.readPassword(ConsoleColors.GREEN_BOLD_BRIGHT + "Login password : " + ConsoleColors.RESET);
+                    char[] password = console.readPassword(ConsoleColors.YELLOW_BOLD_BRIGHT + "Login password : " + ConsoleColors.RESET);
                     Loginpass = new String(password);
                     passman.encrypt(LoginUsername, Loginpass);
                     if(passman.accounts.get(passman.Encrypteduname).compareTo(passman.Encryptedpass) != 0)

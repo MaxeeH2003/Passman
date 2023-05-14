@@ -1,6 +1,7 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "c:\\Users\\Cozmic\\Desktop\\jcTable.jar"
+        "c:\\Users\\Cozmic\\Desktop\\jcTable.jar",
+        "jcTable.jar"
     ]
 }
