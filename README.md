@@ -56,7 +56,8 @@ If you would like to contribute to Passman, feel free to submit a pull request. 
 Passman is released under the UnLicense.See [LICENSE](https://unlicense.org/) for more details.
 
 ## Screen-shots
+![passman1](https://github.com/Cozmeh/Passman/assets/117145297/93f0dcd2-7c7c-4e85-a359-ae2abc93dac7)
+![passman2](https://github.com/Cozmeh/Passman/assets/117145297/0e5029b2-6f55-459d-88a4-16c7b7b15df9)
+![passman3](https://github.com/Cozmeh/Passman/assets/117145297/ed183b0f-a265-4a9f-9d74-8c7afe4a0887)
 
-![passman1](https://github.com/Cozmeh/PassmanOfflline/assets/117145297/2cbb55b7-d64e-4824-9afe-51772d407de2)
-![passman2](https://github.com/Cozmeh/PassmanOfflline/assets/117145297/37525076-c64e-43eb-8b6c-73fb5ce4ab14)
-![passman3](https://github.com/Cozmeh/PassmanOfflline/assets/117145297/55b62f05-f8f0-4a95-aa1a-cff7f95ed782)
+
