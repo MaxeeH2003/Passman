@@ -6,18 +6,14 @@ Passman is an offline console-based password manager for desktop use. It allows 
 To install Passman, you need to clone this repository to your local machine and then install the required dependencies. You can follow the below steps to get started:
 
 ```bash
-
+https://github.com/Cozmeh/Passman.git
 ```
-
+> also dont forget to include [JcTable.jar](https://github.com/Cozmeh/ConsoleTable4java/releases/download/v1.0.0/jcTable.jar) in the project class path 
 ## Usage
 
 To use Passman, you need to download the console table for java (jar file) and add it to the class path of the project [JcTable.jar](https://github.com/Cozmeh/ConsoleTable4java/releases/download/v1.0.0/jcTable.jar)
 
-```bash
-
-```
-
-Once the program starts, you will see a prompt asking you to enter your login password. If it's your first time using Passman, you can create an account by typing '!newAccount'. After entering the password, you will see the Passman console.
+Once the program starts, you will see a prompt asking you to enter your login password. If it's your first time using Passman, you can create an account by typing `!newAccount`. After entering the password, you will see the Passman console.
 
 ### Commands
 
