@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
@@ -8,43 +7,33 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import ConsoleTable.ct4j;
 
-
-
 // MAIN CLASS 
 public class Passman {
-
     // GLOBAL VARIABLES
     private Map<String, ArrayList<String>> details = new LinkedHashMap<String, ArrayList<String>>();
     private Map<String,String> accounts = new HashMap<>(); // user account information
-    //private Map<String,String> settings = new HashMap<>();    
     private String key = " "; // initialize them to access in the methods
     private ArrayList<String> values;
     private static String Loginpass , LoginUsername = "sample";
-
     // ENCRYPTION / DECRYPTION VARIABLES
     private String Encrypteduname = " ";
     private String Encryptedpass = " ";
     private String Decrypteduname = "";
     private String Decryptedpass = "";
-
     // GLOBAL SCANNER
     static Scanner scan = new Scanner(System.in);
     // TABLE VARIABLES
     private String horTableSep = "-" , verTableSep = "|", whitespace = " " , cornerJoint = "+";
 
 
-
     // ENCRYPTION
     private void encrypt(String uname, String pass) 
     {
-
         int flUname = uname.length(); // length of the username
         int hlUname = flUname / 2; // half lenght of the username
         int flPass = pass.length(); // length of the pass
         int hlPass = flPass / 2; // half length of the password
-
-        char[] unChar = uname.toCharArray(); // storing the passed uname and password into a character sequence to
-                                             // process in a loop
+        char[] unChar = uname.toCharArray(); // storing the passed uname and password into a character sequence to // process in a loop                                    
         char[] pasChar = pass.toCharArray();
         // --------------------------------------------------------
         // FIRST SHIFT
@@ -67,7 +56,6 @@ public class Passman {
         // SECOND SHIFT
         String secondShift_uname = "";
         String secondShift_pass = "";
-
         for (char c : unChar) 
         { // shift plus 3
             c += hlUname + 3;
@@ -81,10 +69,8 @@ public class Passman {
         // ---------------------------------------------------------------
         Encrypteduname = ""; // global variables to use in other functions
         Encryptedpass = "";
-
         Encrypteduname = secondShift_uname + firstShift_uname;
         Encryptedpass = secondShift_pass + firstShift_pass;
-
     }
 
 
@@ -95,13 +81,10 @@ public class Passman {
         int hlUname = flUname / 2; // half lenght of the username
         int flPass = pass.length() / 2; // length of the pass
         int hlPass = flPass / 2; // half length of the password
-
         String tempuname = "";
         String temppass = "";
-
         tempuname = uname.substring(0, flUname);
         temppass = pass.substring(0, flPass);
-
         char[] unChar = tempuname.toCharArray(); // storing the passed uname and password into a character sequence to
         char[] pasChar = temppass.toCharArray();
         // --------------------------------------------------------
@@ -119,16 +102,13 @@ public class Passman {
             c -= hlPass + 3;
             secondShift_pass = secondShift_pass + c;
         }
-
         // --------------------------------------------------------------
         Decrypteduname = ""; // global variables to use in other functions
         Decryptedpass = "";
-
         Decrypteduname = secondShift_uname;
         Decryptedpass = secondShift_pass;
 
     }
-
 
     // SAVES LOGIN DATA
     private void savelogin() throws IOException 
@@ -139,7 +119,6 @@ public class Passman {
         out.close();
         fileout.close();
     }
-
 
     // LOADS LOGIN DATA 
     private void loadlogin() throws IOException, ClassNotFoundException
@@ -165,56 +144,15 @@ public class Passman {
         }
     }
 
-
-    // SAVES SETTINGS DATA 
-    /*private void saveSettings() throws IOException
-    {
-        FileOutputStream fileout = new FileOutputStream(".Tpmsettings");
-        ObjectOutputStream out = new ObjectOutputStream(fileout);
-        out.writeObject(settings);
-        out.close();
-        fileout.close();
-    }*/
-
-    
-    // LOADS SETTINGS DATA
-    /*private void loadSettings() throws IOException, ClassNotFoundException
-    {
-        try
-        {
-            try
-            {
-                FileInputStream filein = new FileInputStream(".Tpmsettings");
-                ObjectInputStream in = new ObjectInputStream(filein);
-                settings = (Map<String, String>) in.readObject();
-                in.close();
-                filein.close();
-            }
-            catch(FileNotFoundException e)
-            {
-                saveSettings();
-            }
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-        }
-    }
-*/
-
     // CREATES ACCOUNT
     private void createAcc() throws Exception 
     {
         clear();
         String loginPass = " ", reloginPass = " ";
-         
-
         System.out.println("Create an Account\n");
         System.out.print("Enter your login Username : ");
         String loginUname = scan.nextLine();
-
         encrypt(loginUname, loginUname);
-        
         if(accounts.containsKey(Encrypteduname))
         {
             System.out.println(ConsoleColors.RED_BRIGHT + "Error : Login Username already exists" + ConsoleColors.RESET);
@@ -229,14 +167,7 @@ public class Passman {
             loginPass = scan.nextLine();
             System.out.print("Re-Enter login Password   : ");
             reloginPass = scan.nextLine();
-            /*if(loginPass == null && reloginPass == null)
-                {
-                    loginPass = " ";
-                    reloginPass = " ";
-                }*/
         }
-        
-
         if(loginPass.equals(reloginPass))
         {
             encrypt(loginUname, loginPass);
@@ -252,11 +183,8 @@ public class Passman {
             scan.nextLine();
             clear();
             createAcc();
-            
         }
-
     }
-
 
     // FOR CHANGING PASSMAN ACCOUNT PASSWORD
     private static void ChangeAccountPass() throws Exception {
@@ -265,7 +193,6 @@ public class Passman {
         passman.loadlogin();
         System.out.print("Login Username : ");
         String Username = scan.nextLine();
-
         if(Username.compareTo(LoginUsername) == 0)
         {
             passman.encrypt(LoginUsername, "");
@@ -287,7 +214,6 @@ public class Passman {
                         main(null);
                     }
                 } 
-
                 char[] newpass = console.readPassword("Enter new Account login password : ");
                 String newLoginpass = new String(newpass);  
                 passman.encrypt(Username, newLoginpass);
@@ -306,36 +232,29 @@ public class Passman {
     // DISPLAYS AVAILABLE IN TABLE FORM
     private void DisplayAvailable(){
         int sLength = 19;
-        
-
-        Set<String> keys = details.keySet();
-                    
+        Set<String> keys = details.keySet();       
         for (String key : keys) 
         {
             if(key.length() >= sLength){
                 sLength = key.length() + 1;
             }                                                                                 
         }
-
         System.out.println(" ");
         System.out.println(
             cornerJoint + 
             horTableSep.repeat(sLength+1) + 
             cornerJoint 
         );
-
         System.out.println(
             verTableSep + ConsoleColors.PURPLE_BACKGROUND +
             " Available services " + ConsoleColors.RESET + whitespace.repeat(sLength - 19) +
             verTableSep
         );
-
         System.out.println(
             cornerJoint + 
             horTableSep.repeat(sLength+1) + 
             cornerJoint 
         );
-
         for (String key : keys) 
         {
             System.out.println(
@@ -344,7 +263,6 @@ public class Passman {
                 verTableSep
             );                                                                    
         }
-
         System.out.println(
             cornerJoint + 
             horTableSep.repeat(sLength+1) + 
@@ -437,15 +355,12 @@ public class Passman {
                 "\n  ██      ██   ██ ███████ ███████ ██      ██ ██   ██ ██   ████ " +
 
                 "");
-
     }
 
 
     // ADDS THE DATA TO DB/LOCAL
     private void Add() throws IOException
     {
-        
-        
         System.out.println("-----------------------------------------------------");
         System.out.print("Service name : "); // servicename is the name of the service in which the username and password will be userd
         String sname = scan.nextLine().trim(); // sname = service name
@@ -482,10 +397,8 @@ public class Passman {
                 save();
                 System.out.println("-----------------------------------------------------");
             }
-
         }
     }
-
 
     // EDITS THE DATA  IN DB/LOCAL
     private void edit() throws IOException
@@ -499,7 +412,6 @@ public class Passman {
             DisplayAvailable();
             System.out.print("\nUpdate : ");
             String sname = scan.nextLine().trim();
-            
             if (details.get(sname) == null)
             {
                 System.out.println(ConsoleColors.RED_BRIGHT + "\nError : Invalid service name" + ConsoleColors.RESET + "[" + sname + "]");
@@ -544,8 +456,6 @@ public class Passman {
                 System.out.println(ConsoleColors.TEAL + "\nSuccess : Record updated" + ConsoleColors.RESET);
                 save();
                 System.out.println("-----------------------------------------------------");
-
-                
             }
         }
     }
@@ -590,7 +500,6 @@ public class Passman {
         }
     }
 
-
      // DISPLAYS THE DATA 
      private void display() throws Exception
      {
@@ -618,7 +527,6 @@ public class Passman {
                         key = entry.getKey();                                    
                         values = entry.getValue();                              
                         decrypt(values.get(0), values.get(1));
-                        
                         table.addRow(Integer.toString(record),key,Decrypteduname,Decryptedpass,values.get(2));
                         record++;
                     }
@@ -634,7 +542,6 @@ public class Passman {
                 else
                 {
                     DisplayAvailable();
- 
                     BufferedReader bufread = new BufferedReader(new InputStreamReader(System.in));
                     System.out.print("\nDisplay : ");
                     String servicename = bufread.readLine().trim();
@@ -664,16 +571,13 @@ public class Passman {
                                     System.out.println("\n> " + ConsoleColors.PURPLE + key + ConsoleColors.RESET + "  <" + ConsoleColors.WHITE_ITALIC + Decrypteduname + ConsoleColors.RESET + " | " + ConsoleColors.CYAN_ITALIC + Decryptedpass+ ConsoleColors.RESET + " | " + values.get(2) + ">");
                                 }
                             }
-                           
                         }
                     }
                     if(!notfound.isEmpty()){
                         System.out.println(ConsoleColors.RED_BRIGHT + "\nError : Invalid Servicenames "+ ConsoleColors.RESET + notfound.toString());
                     }
-
                 }
                 break;
- 
             case "3":
                 if(details.isEmpty())
                 {
@@ -685,8 +589,6 @@ public class Passman {
                     System.out.print("\nUsername? : ");
                     String Username = bufread.readLine().trim();
                     Boolean found = false;
-
-                    
                     for (Map.Entry<String, ArrayList<String>> entry : details.entrySet())
                     {
                         String key = entry.getKey();
@@ -702,7 +604,6 @@ public class Passman {
                     {
                         System.out.println(ConsoleColors.RED_BRIGHT + "\nError : Record not found "+ ConsoleColors.RESET + "[ " + Username + " ]");
                     }
-                
                 }
                 break;
 
@@ -710,9 +611,7 @@ public class Passman {
                 System.out.println(ConsoleColors.RED_BRIGHT + "Error : Invalid selection" + ConsoleColors.RESET);
                 break;
         }
- 
     }
-
 
     // COPY TO CLIPBOARD
     private void copy()
@@ -751,13 +650,8 @@ public class Passman {
                     }
                 }
             }
-
         }
-
-        
-
     }
-
 
      // EXPORTS THE DATA 
     private void export()
@@ -865,17 +759,12 @@ public class Passman {
                         System.out.println(ConsoleColors.RED_BRIGHT + "\nError : " + e + ConsoleColors.RESET);
                     }
                     break;
-    
                 default:
                     System.out.println(ConsoleColors.RED_BRIGHT + "Error : Invalid selection " + ConsoleColors.RESET + "["+ ex_selection + "]");
                     break;
             }
- 
-
-        }
-         
+        } 
     }
-
 
      // CLEAR TERMINAL SCREEN 
     private void clear()
@@ -889,7 +778,6 @@ public class Passman {
             System.out.println("Cannot clear screen at the moment!");
         }
     }
-
 
     // HELP 
     public static void help()
@@ -913,19 +801,12 @@ public class Passman {
        
     }
 
-
-
-
     // ----------------------------------MAIN METHOD------------------------------------
     public static void main(String[] args) throws Exception 
     {
-        
-        //java.util.logging.Logger.getLogger("org.mongodb.driver").setLevel(Level.OFF); // logger content turned off
         Console console = System.console();
         Passman passman = new Passman();
         String ch;
-
-        
         passman.loadlogin();
 
         while (true)
@@ -963,7 +844,6 @@ public class Passman {
                         main(null);
                     }
                 } 
-                
             }
             else
             {
@@ -971,11 +851,7 @@ public class Passman {
                 System.out.print("\nPress any key to continue..");
                 scan.nextLine();
                 main(null);
-                //break;
-                
             }
-            
-
             // ------------------Login-----------------------
 
             try 
@@ -989,10 +865,8 @@ public class Passman {
                 passman.savelogin();
                 System.out.println(ConsoleColors.TEAL + "Success : Local Database Connected " + ConsoleColors.RESET);
                 System.out.println("--------------------------------------------------------");
-
                 while (true) 
                 {
-
                     System.out.print(ConsoleColors.GREEN_BOLD_BRIGHT + "\nPassman > " + ConsoleColors.RESET);
                     ch = scan.nextLine();
                     switch (ch.trim().toLowerCase()) 
@@ -1053,7 +927,6 @@ public class Passman {
                 System.out.println(ConsoleColors.RED_BRIGHT + "Error : Invalid login [Username/Password]" + ConsoleColors.RESET);
                 System.out.println(e);
             }
-    
         }
     }
 }
