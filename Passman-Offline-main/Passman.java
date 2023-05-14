@@ -3,8 +3,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 import javax.swing.JFileChooser;
-import javax.swing.plaf.synth.SynthScrollBarUI;
-
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -18,7 +16,7 @@ public class Passman {
     // GLOBAL VARIABLES
     private Map<String, ArrayList<String>> details = new LinkedHashMap<String, ArrayList<String>>();
     private Map<String,String> accounts = new HashMap<>(); // user account information
-    private Map<String,String> settings = new HashMap<>();    
+    //private Map<String,String> settings = new HashMap<>();    
     private String key = " "; // initialize them to access in the methods
     private ArrayList<String> values;
     private static String Loginpass , LoginUsername = "sample";
@@ -35,19 +33,6 @@ public class Passman {
     private String horTableSep = "-" , verTableSep = "|", whitespace = " " , cornerJoint = "+";
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    
 
     // ENCRYPTION
     private void encrypt(String uname, String pass) 
@@ -182,18 +167,18 @@ public class Passman {
 
 
     // SAVES SETTINGS DATA 
-    private void saveSettings() throws IOException
+    /*private void saveSettings() throws IOException
     {
         FileOutputStream fileout = new FileOutputStream(".Tpmsettings");
         ObjectOutputStream out = new ObjectOutputStream(fileout);
         out.writeObject(settings);
         out.close();
         fileout.close();
-    }
+    }*/
 
     
     // LOADS SETTINGS DATA
-    private void loadSettings() throws IOException, ClassNotFoundException
+    /*private void loadSettings() throws IOException, ClassNotFoundException
     {
         try
         {
@@ -215,7 +200,7 @@ public class Passman {
             System.out.println(e);
         }
     }
-
+*/
 
     // CREATES ACCOUNT
     private void createAcc() throws Exception 
@@ -625,9 +610,10 @@ public class Passman {
                 else
                 {
                     ct4j table = new ct4j();
+                    Map<String, ArrayList<String>> sortedmap = new TreeMap<>(details);
                     table.setHeader("Record","Servicename","Username","Password","Address");
                     int record = 1;
-                    for (Map.Entry<String, ArrayList<String>> entry : details.entrySet())
+                    for (Map.Entry<String, ArrayList<String>> entry : sortedmap.entrySet())
                     {
                         key = entry.getKey();                                    
                         values = entry.getValue();                              
@@ -737,7 +723,7 @@ public class Passman {
         }
         else
         {
-            Set<String> keys = details.keySet();
+            //Set<String> keys = details.keySet();
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
             System.out.println("\n'Select the service name to copy its password to clipboard'");
@@ -994,87 +980,73 @@ public class Passman {
 
             try 
             {
-                if (true) 
+                System.out.println();
+                System.out.println("  Welcome to");
+                logo();
+                System.out.println("\nFor a list of available commands, type 'help'.");
+                System.out.println("--------------------------------------------------------");
+                passman.load();
+                passman.savelogin();
+                System.out.println(ConsoleColors.TEAL + "Success : Local Database Connected " + ConsoleColors.RESET);
+                System.out.println("--------------------------------------------------------");
+
+                while (true) 
                 {
-                    System.out.println();
-                    System.out.println("  Welcome to");
-                    logo();
-                    System.out.println("\nFor a list of available commands, type 'help'.");
-                    System.out.println("--------------------------------------------------------");
-                    passman.load();
-                    passman.savelogin();
-                    passman.loadSettings();
 
-            
-                    System.out.println(ConsoleColors.TEAL + "Success : Local Database Connected " + ConsoleColors.RESET);
-                    
-                    System.out.println("--------------------------------------------------------");
-
-                    while (true) 
+                    System.out.print(ConsoleColors.GREEN_BOLD_BRIGHT + "\nPassman > " + ConsoleColors.RESET);
+                    ch = scan.nextLine();
+                    switch (ch.trim().toLowerCase()) 
                     {
-
-                        System.out.print(ConsoleColors.GREEN_BOLD_BRIGHT + "\nPassman > " + ConsoleColors.RESET);
-                        ch = scan.nextLine();
-                    
-                        passman.loadSettings();
-
-                        switch (ch.trim().toLowerCase()) 
-                        {
-                            case "exit":
-                                System.out.println(ConsoleColors.RED_BACKGROUND + "\nProgram Exited!\n" + ConsoleColors.RESET);
-                                System.exit(0);
-                                break;
-                            case "add":
-                                passman.Add();
-                                break;
-                            case "remove":
-                                passman.remove();
-                                break;
-                            case "edit":
-                                passman.edit();
-                                break;
-                            case "display": 
-                                passman.display();
-                                break;
-                            case "help":
-                                help();
-                                break;
-                            case "save":
-                                passman.save();
-                                break;
-                            case "load":
-                                passman.load();
-                                break;
-                            case "clear":
-                                passman.clear();
-                                break;
-                            case "logo":
-                                logo();
-                                break;
-                            case "export":
-                                passman.export();
-                                break;
-                            case "about":
-                                System.out.println("This is a Terminal Password Manager");
-                                break;
-                            case "copy":
-                                passman.copy();
-                                break;
-                            case "scan":
-                                //statusChecker.status(passman.details);
-                                break;
-                            case "reset":
-                                Passman.ChangeAccountPass();
-                                break;
-                            default:
-                                System.out.println(ConsoleColors.RED_BRIGHT + "Error : Invalid command"+ ConsoleColors.RESET + "[" + ch + "]");
-                                break;
-                        }
+                        case "exit":
+                            System.out.println(ConsoleColors.RED_BACKGROUND + "\nProgram Exited!\n" + ConsoleColors.RESET);
+                            System.exit(0);
+                            break;
+                        case "add":
+                            passman.Add();
+                            break;
+                        case "remove":
+                            passman.remove();
+                            break;
+                        case "edit":
+                            passman.edit();
+                            break;
+                        case "display": 
+                            passman.display();
+                            break;
+                        case "help":
+                            help();
+                            break;
+                        case "save":
+                            passman.save();
+                            break;
+                        case "load":
+                            passman.load();
+                            break;
+                        case "clear":
+                            passman.clear();
+                            break;
+                        case "logo":
+                            logo();
+                            break;
+                        case "export":
+                            passman.export();
+                            break;
+                        case "about":
+                            System.out.println("This is a Terminal Password Manager");
+                            break;
+                        case "copy":
+                            passman.copy();
+                            break;
+                        case "scan":
+                            //statusChecker.status(passman.details);
+                            break;
+                        case "reset":
+                            Passman.ChangeAccountPass();
+                            break;
+                        default:
+                            System.out.println(ConsoleColors.RED_BRIGHT + "Error : Invalid command"+ ConsoleColors.RESET + "[" + ch + "]");
+                            break;
                     }
-                } 
-                else 
-                {
-                    System.out.println(ConsoleColors.RED_BRIGHT + "Error : Invalid login [Username/Password]" + ConsoleColors.RESET);
                 }
             } 
             catch (NullPointerException e) {
