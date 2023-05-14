@@ -362,7 +362,7 @@ public class Passman {
     private void Add() throws IOException
     {
         System.out.println("-----------------------------------------------------");
-        System.out.print("Service name : "); // servicename is the name of the service in which the username and password will be userd
+        System.out.print("Service name         : "); // servicename is the name of the service in which the username and password will be userd
         String sname = scan.nextLine().trim(); // sname = service name
 
         if (sname == "")
@@ -374,7 +374,7 @@ public class Passman {
             System.out.println(ConsoleColors.RED_BRIGHT + "\nError : Service name already exists" + ConsoleColors.RESET);
         }
         else 
-        {
+        {                       
             System.out.print("Email/Username       : ");
             String uname = scan.nextLine().trim(); // uname = username
             System.out.print("Password             : ");
