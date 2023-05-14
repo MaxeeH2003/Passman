@@ -11,10 +11,10 @@ https://github.com/Cozmeh/Passman.git
 > also dont forget to include [JcTable.jar](https://github.com/Cozmeh/ConsoleTable4java/releases/download/v1.0.0/jcTable.jar) in the project class path 
 ## Usage
 
-To use Passman, you need to download the console table for java (jar file) and add it to the class path of the project [JcTable.jar](https://github.com/Cozmeh/ConsoleTable4java/releases/download/v1.0.0/jcTable.jar).
+To use Passman, you need to download the console table for java (jar file) and add it to the class path of the project [JcTable.jar](https://github.com/Cozmeh/Passman/releases/download/v1.0/jcTable.jar).
 
 Optionals
- * You can even make a executable (.exe) of the passman using [Launch4J](https://launch4j.sourceforge.net/) and use the [JRE]() 
+ * You can even make a executable (.exe) of the passman using [Launch4J](https://launch4j.sourceforge.net/) and use the [JRE](https://github.com/Cozmeh/Passman/releases/download/v1.0/Terminal.Passman.jre.zip) 
  * also you can add the passman.exe to windows RUN by the following batch command save it as .bat and keep it inside the main passman folder
 ```
 @echo off
