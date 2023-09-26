@@ -11,11 +11,11 @@ https://github.com/Cozmeh/Passman.git
 > also dont forget to include [JcTable.jar](https://github.com/Cozmeh/ConsoleTable4java/releases/download/v1.0.0/jcTable.jar) in the project class path 
 ## Usage
 
-To use Passman, you need to download the console table for java (jar file) and add it to the class path of the project [JcTable.jar](https://github.com/Cozmeh/Passman/releases/download/v1.0/jcTable.jar).
+To use Passman, you need to download the console table for Java (jar file) and add it to the classpath of the project [JcTable.jar](https://github.com/Cozmeh/Passman/releases/download/v1.0/jcTable.jar).
 
-Optionals
- * You can even make a executable (.exe) of the passman using [Launch4J](https://launch4j.sourceforge.net/) and use the [JRE](https://github.com/Cozmeh/Passman/releases/download/v1.0/Terminal.Passman.jre.zip) 
- * also you can add the passman.exe to windows RUN by the following batch command save it as .bat and keep it inside the main passman folder
+Optional
+ * You can even make an executable (.exe) of the passman using [Launch4J](https://launch4j.sourceforge.net/) and use the [JRE](https://github.com/Cozmeh/Passman/releases/download/v1.0/Terminal.Passman.jre.zip) 
+ * also you can add the passman.exe to Windows RUN by the following batch command save it as .bat and keep it inside the main passman folder
 ```
 @echo off
 DOSKEY passman = "C:\Users\example\consolePassman\Passman.exe"
@@ -45,7 +45,7 @@ You can use these commands by typing the command name and following the on-scree
 
 ## Security
 
-Passman uses custom encryption scheme to encrypt and store your data on the local machine. The encryption key is derived from your credentials, which is hashed using a custom encryption algorithm which spits out messed up string, so every credential will follow a different encryption pattern based on its length. Passman does not store your login password or any other sensitive information , everything is stored in your local system!.
+Passman uses a custom encryption scheme to encrypt and store your data on the local machine. The encryption key is derived from your credentials, which is hashed using a custom encryption algorithm that spits out messed up string, so every credential will follow a different encryption pattern based on its length. Passman does not store your login password or any other sensitive information, everything is stored in your local system!
 
 ## Contributing
 
@@ -53,7 +53,7 @@ If you would like to contribute to Passman, feel free to submit a pull request. 
 
 ## License
 
-Passman is released under the UnLicense.See [LICENSE](https://unlicense.org/) for more details.
+Passman is released under The-Unlicense. See [LICENSE](https://unlicense.org/) for more details.
 
 ## Screen-shots
 ![passman1](https://github.com/Cozmeh/Passman/assets/117145297/93f0dcd2-7c7c-4e85-a359-ae2abc93dac7)
